@@ -4,14 +4,14 @@ import cookieSession from "cookie-session";
 
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middleware/errorHandler";
-import userRouter from "./route";
+import userRouter from "./route/auth";
 
 const app = express();
 app.set("trust proxy", true);
 app.use(
   cookieSession({
     signed: false,
-    secure: true,
+    secure: process.env.NODE_ENV !== "test",
     httpOnly: true,
   })
 );

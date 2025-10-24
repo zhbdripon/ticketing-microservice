@@ -1,11 +1,11 @@
 import express from "express";
 import { z } from "zod";
-import { BadRequestError, ValidationError } from "./errors";
-import { User } from "./model/user";
+import { BadRequestError, ValidationError } from "../errors";
+import { User } from "../model/user"
 import jwt from "jsonwebtoken";
-import { Password } from "./services/password";
-import { authReqValidation } from "./middleware/authReqValidation";
-import { currentUser } from "./middleware/currentUser";
+import { Password } from "../services/password";
+import { authReqValidation } from "../middleware/authReqValidation";
+import { currentUser } from "../middleware/currentUser";
 
 const router = express.Router();
 
