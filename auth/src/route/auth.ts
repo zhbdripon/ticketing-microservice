@@ -1,45 +1,47 @@
 import express from "express";
-import { z } from "zod";
-import { BadRequestError, ValidationError } from "../errors";
-import { User } from "../model/user"
 import jwt from "jsonwebtoken";
-import { Password } from "../services/password";
+import { BadRequestError } from "../errors";
 import { authReqValidation } from "../middleware/authReqValidation";
 import { currentUser } from "../middleware/currentUser";
+import { User } from "../model/user";
+import { Password } from "../services/password";
 
 const router = express.Router();
+
+router.get("/api/users/check", (req, res) => {
+  res.send({ status: "ok" });
+});
 
 router.get("/api/users/current-user", currentUser, (req, res) => {
   res.send({ currentUser: req.currentUser || null });
 });
 
-router.post("/api/users/sign-in", authReqValidation, (req, res) => {
+router.post("/api/users/sign-in", authReqValidation, async (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email }).then((user) => {
-    if (!user) {
-      throw new BadRequestError("Invalid credentials");
-    }
+  
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new BadRequestError("Invalid credentials");
+  }
 
-    Password.compare(user.password, password).then((passwordMatch) => {
-      if (!passwordMatch) {
-        throw new BadRequestError("Invalid credentials");
-      }
-    });
+  const passwordMatch = await Password.compare(user.password, password);
+  if (!passwordMatch) {
+    throw new BadRequestError("Invalid credentials");
+  }
 
-    const jwToken = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      process.env.JWT_KEY!
-    );
+  const jwToken = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+    },
+    process.env.JWT_KEY!
+  );
 
-    req.session = {
-      jwt: jwToken,
-    };
+  req.session = {
+    jwt: jwToken,
+  };
 
-    res.status(200).send(user);
-  });
+  res.status(200).send(user);
 });
 
 router.post("/api/users/sign-out", (req, res) => {
