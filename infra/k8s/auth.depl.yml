@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: zhbdripon/ticketing-auth
+          image: zhbdripon/ticketingauth
           env:
             - name: JWT_KEY
               valueFrom:
