@@ -1,9 +1,7 @@
-import express from "express";
-import "express-async-errors";
 import cookieSession from "cookie-session";
+import express from "express";
 
-import { NotFoundError } from "./errors";
-import { errorHandler } from "./middleware/errorHandler";
+import { errorHandler, NotFoundError } from "@microservice_demo/common";
 import userRouter from "./route/auth";
 
 const app = express();
@@ -18,7 +16,7 @@ app.use(
 app.use(express.json());
 
 app.use(userRouter);
-app.all("*", (req, res) => {
+app.use((req, res) => {
   throw new NotFoundError();
 });
 app.use(errorHandler);
