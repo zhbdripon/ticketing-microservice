@@ -26,3 +26,11 @@ build:
         manual:
           - src: '**/*.{ts,tsx}'
             dest: .
+    - image: zhbdripon/ticketingtickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
