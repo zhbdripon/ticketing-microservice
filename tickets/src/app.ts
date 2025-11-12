@@ -6,7 +6,10 @@ import {
   errorHandler,
   NotFoundError,
 } from "@microservice_demo/common";
-import { newTicketRouter } from "./route/new-ticket";
+import { ticketCreateRouter } from "./route/ticket-create";
+import { ticketDetailRouter } from "./route/ticket-details";
+import { ticketListRouter } from "./route/ticket-list";
+import { ticketUpdateRouter } from "./route/ticket-update";
 
 const app = express();
 app.set("trust proxy", true);
@@ -20,7 +23,10 @@ app.use(
 app.use(express.json());
 
 app.use(currentUser);
-app.use(newTicketRouter);
+app.use(ticketCreateRouter);
+app.use(ticketDetailRouter);
+app.use(ticketListRouter);
+app.use(ticketUpdateRouter);
 
 app.use((req, res) => {
   throw new NotFoundError();

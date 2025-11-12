@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
+import z from "zod";
 // removed unused import
+
+export const ticketUpdateSchema = z.object({
+  title: z.string(),
+  price: z.number(),
+});
 
 interface TicketAttrs {
   title: string;
