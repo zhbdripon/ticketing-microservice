@@ -6,11 +6,13 @@ import {
 } from "@microservice_demo/common";
 import express, { NextFunction, Request, Response } from "express";
 import { Ticket, ticketUpdateSchema } from "../../model/ticket";
+import { TicketUpdatedPublisher } from "./events/publishers/ticket-update-publisher";
+import { natsWrapper } from "../nats-client";
 
 const router = express.Router();
 
 router.put(
-  "api/tickets/:id",
+  "/api/tickets/:id",
   requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     const existingTicket = await Ticket.findById(req.params.id);
@@ -37,6 +39,12 @@ router.put(
     });
 
     await existingTicket.save();
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: existingTicket.id,
+      title: existingTicket.title,
+      price: existingTicket.price,
+      userId: existingTicket.userId,
+    });
 
     res.send(existingTicket);
   }

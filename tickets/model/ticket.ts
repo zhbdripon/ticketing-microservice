@@ -9,7 +9,7 @@ export const ticketUpdateSchema = z.object({
 
 interface TicketAttrs {
   title: string;
-  price: Number;
+  price: number;
   userId: string;
 }
 
@@ -19,7 +19,7 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
 
 interface TicketDoc extends mongoose.Document {
   title: string;
-  price: Number;
+  price: number;
   userId: string;
 }
 

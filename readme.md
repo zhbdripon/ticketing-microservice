@@ -4,5 +4,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 3. Run all the yml using 
 skaffold dev
 4. set env
-kubectl create secret generic jwt-secret --fro
-m-literal=JWT_KEY=asdf
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
+5. port forward to direct access pod
+kubectl port-forward podName portNumber:portNumber
+6. Port forward:
+kubectl port-forward nats-depl-xxxxxxxx-xxxx  8222:8222
+kubectl port-forward nats-depl-xxxxxxxx-xxxx  4222:4222

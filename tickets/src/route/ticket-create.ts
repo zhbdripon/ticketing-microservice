@@ -2,6 +2,8 @@ import { NextFunction, Request, Response, Router } from "express";
 import { requireAuth, ValidationError } from "@microservice_demo/common";
 import * as z from "zod";
 import { Ticket } from "../../model/ticket";
+import { TicketCreatedPublisher } from "./events/publishers/ticket-create-publisher";
+import { natsWrapper } from "../nats-client";
 
 const router = Router();
 
@@ -29,8 +31,14 @@ router.post(
     });
 
     await ticket.save();
+    new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
-    res.sendStatus(201).send(ticket);
+    res.status(201).send(ticket);
   }
 );
 

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 
 let mongo: MongoMemoryServer;
 process.env.NODE_ENV = "test";
+jest.mock("../nats-client");
 
 beforeAll(async () => {
   process.env.JWT_KEY = "test_jwt_key";
