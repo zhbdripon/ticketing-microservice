@@ -51,10 +51,13 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: my-pod
+  labels:
+    app: my-pod # Optional labels for grouping and selection. required for services and deployments.
 spec:
   containers:
   - name: my-container
     image: nginx:latest
+    imagePullPolicy: Never # Optional: Don't pull the image if it already exists locally (useful for local development) otherwise it defaults to "IfNotPresent"
 ```
 
 > `nginx:latest` is the image of the container to run. You can use any image from Docker Hub, or create your own and push it.
