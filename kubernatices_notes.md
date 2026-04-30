@@ -221,6 +221,42 @@ spec:
 
 ---
 
+## Ingress
+
+An Ingress is a Kubernetes API object that defines how external HTTP/HTTPS traffic should reach your services inside the cluster.
+It does NOT handle traffic itself. It just describes routing rules.
+
+Example use case:
+You have multiple microservices:
+
+- auth-service
+- user-service
+- payment-service
+
+You can define rules like:
+- api.example.com/auth → auth-service
+- api.example.com/users → user-service
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+      nodePort: 30007
+```
+
 ## Ingress Controller
 
 An Ingress Controller is a pod with a set of routing rules to distribute traffic to different services. It provides:
